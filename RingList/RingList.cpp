@@ -3,18 +3,103 @@
 
 #include <iostream>
 
-int main()
+class Ring
 {
-    std::cout << "Hello World!\n";
+private:
+	class Node
+	{
+	public:
+		int data;
+		Node* next;
+
+		Node() 
+		{
+			data = NULL;
+			next = NULL;
+		}
+	};
+	Node* head;
+
+	int size;
+public:
+	Ring();
+	~Ring();
+
+	int GetSize() { return size; }
+
+	void pushBack(int data);
+	void showRing();
+	void popFront();
+};
+
+Ring::Ring()
+{
+	head = NULL;
+	size = 0;
 }
 
-// Запуск программы: CTRL+F5 или меню "Отладка" > "Запуск без отладки"
-// Отладка программы: F5 или меню "Отладка" > "Запустить отладку"
+Ring::~Ring()
+{
+	if (size == 1)
+	{
+		delete head;
+	}
+	else
+	{
+		while (size)
+		{
+			popFront();
+		}
+	}
+}
 
-// Советы по началу работы 
-//   1. В окне обозревателя решений можно добавлять файлы и управлять ими.
-//   2. В окне Team Explorer можно подключиться к системе управления версиями.
-//   3. В окне "Выходные данные" можно просматривать выходные данные сборки и другие сообщения.
-//   4. В окне "Список ошибок" можно просматривать ошибки.
-//   5. Последовательно выберите пункты меню "Проект" > "Добавить новый элемент", чтобы создать файлы кода, или "Проект" > "Добавить существующий элемент", чтобы добавить в проект существующие файлы кода.
-//   6. Чтобы снова открыть этот проект позже, выберите пункты меню "Файл" > "Открыть" > "Проект" и выберите SLN-файл.
+void Ring::pushBack(int data)
+{
+	if (head==NULL)
+	{
+		Node* newNode = new Node();
+		newNode->data = data;
+		newNode->next = newNode;
+		head = newNode;
+		size++;
+	}
+	else
+	{
+		Node* toAdd = new Node();
+		toAdd->data = data;
+		toAdd->next = NULL;
+		Node* temp = head;
+		/*for (int i=0; i < size; i++)
+		{
+			temp = temp->next;
+		}*/
+		while (temp->next != temp)
+		{
+			temp = temp->next;
+		}
+		temp->next = toAdd;
+		toAdd->next = head;
+		size++;
+	}
+}
+
+void Ring::showRing()
+{
+}
+
+void Ring::popFront()
+{
+	Node* temp = head;
+	head = head->next;
+	delete temp;
+	size--;
+}
+
+int main()
+{
+	Ring ring;
+
+	ring.pushBack(1);
+	ring.pushBack(2);
+	ring.pushBack(3);
+}
