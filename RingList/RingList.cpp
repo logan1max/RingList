@@ -3,6 +3,8 @@
 
 #include <iostream>
 
+using namespace std;
+
 class Ring
 {
 private:
@@ -30,6 +32,7 @@ public:
 	void pushBack(int data);
 	void showRing();
 	void popFront();
+	void delByIndex(int index);
 };
 
 Ring::Ring()
@@ -67,24 +70,26 @@ void Ring::pushBack(int data)
 	{
 		Node* toAdd = new Node();
 		toAdd->data = data;
-		toAdd->next = NULL;
+		toAdd->next = head;
 		Node* temp = head;
-		/*for (int i=0; i < size; i++)
-		{
-			temp = temp->next;
-		}*/
-		while (temp->next != temp)
+		for (int i=0; i < size-1; i++)
 		{
 			temp = temp->next;
 		}
+		
 		temp->next = toAdd;
-		toAdd->next = head;
 		size++;
 	}
 }
 
 void Ring::showRing()
 {
+	Node* temp = head;
+	for (int i = 0; i < size; i++)
+	{
+		cout << temp->data << " ";
+		temp = temp->next;
+	}
 }
 
 void Ring::popFront()
@@ -95,6 +100,21 @@ void Ring::popFront()
 	size--;
 }
 
+void Ring::delByIndex(int index)
+{
+	Node* prev = head;
+	for (int i = 0; i < index - 1; i++)
+	{
+		prev = prev->next;
+	}
+
+	Node* toDelete = prev->next;
+	prev->next = toDelete->next;
+	delete(toDelete);
+
+	size--;
+}
+
 int main()
 {
 	Ring ring;
@@ -102,4 +122,13 @@ int main()
 	ring.pushBack(1);
 	ring.pushBack(2);
 	ring.pushBack(3);
+	ring.pushBack(4);
+
+	ring.showRing();
+	cout << endl;
+
+	ring.delByIndex(2);
+
+	ring.showRing();
+	cout << endl;
 }
